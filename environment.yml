@@ -1,0 +1,10 @@
+name: pangeo-datastore
+channels:
+  - conda-forge
+dependencies:
+  - flask
+  - intake-xarray
+  - pip
+  - pip:
+    - flask-bootstrap
+    - git+https://github.com/pydata/xarray.git

@@ -1,0 +1,33 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Sample Catalog Name{% endblock %}
+
+{% block navbar %}
+<ol class="breadcrumb">
+  {% block crumbs %}
+  <li><a href="#">Sample</a></li>
+  <li><a href="#">Bread</a></li>
+  <li class="active">Crumbs</li>
+  {% endblock %}
+</ol>
+{% endblock %}
+
+{% block content %}
+<h1>{% block name %}Sample Catalog Name{% endblock %}</h1>
+<ul class="list-group">
+  <li class="list-group-item">
+    <h2>Child Catalogs</h2>
+    <ul class="list-group">
+      {% block catalogs %}
+      {% endblock %}
+    </ul>
+  </li>
+  <li class="list-group-item">
+    <h2>Datasets</h2>
+    <ul class="list-group">
+      {% block datasets %}
+      {% endblock %}
+    </ul>
+  </li>
+</ul>
+{% endblock%}
