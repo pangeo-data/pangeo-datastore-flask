@@ -1,5 +1,12 @@
 {% extends "bootstrap/base.html" %}
 
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('static', filename='pangeo-style.css')}}">
+{% endblock %}
+
+
 {% block title %}Sample Catalog Name{% endblock %}
 
 {% block navbar %}
@@ -13,6 +20,10 @@
 {% endblock %}
 
 {% block content %}
+<main role="main" class="container">
+
+<div class="catalog">
+
 <h1>{% block name %}Sample Catalog Name{% endblock %}</h1>
 <ul class="list-group">
   <li class="list-group-item">
@@ -30,4 +41,8 @@
     </ul>
   </li>
 </ul>
+
+</div>
+
+</main><!-- /.container -->
 {% endblock%}
