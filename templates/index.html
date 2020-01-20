@@ -1,46 +1,35 @@
-{% extends "bootstrap/base.html" %}
-
-{% block styles %}
-{{super()}}
-<link rel="stylesheet"
-      href="{{url_for('static', filename='pangeo-style.css')}}">
-{% endblock %}
-
+{% extends "base.html" %}
 
 {% block title %}Sample Catalog Name{% endblock %}
-
-{% block navbar %}
-<ol class="breadcrumb">
-  {% block crumbs %}
-  <li><a href="#">Sample</a></li>
-  <li><a href="#">Bread</a></li>
-  <li class="active">Crumbs</li>
-  {% endblock %}
-</ol>
-{% endblock %}
 
 {% block content %}
 <main role="main" class="container">
 
+<h1>Pangeo Catalog</h1>
+
+<div>
+  <ol class="breadcrumb">
+    {% block crumbs %}
+    <li><a href="#">Sample</a></li>
+    <li><a href="#">Bread</a></li>
+    <li class="active">Crumbs</li>
+    {% endblock %}
+  </ol>
+</div>
+
 <div class="catalog">
 
-<h1>{% block name %}Sample Catalog Name{% endblock %}</h1>
-<ul class="list-group">
-  <li class="list-group-item">
-    <h2>Child Catalogs</h2>
-    <ul class="list-group">
-      {% block catalogs %}
-      {% endblock %}
-    </ul>
-  </li>
-  <li class="list-group-item">
-    <h2>Datasets</h2>
-    <ul class="list-group">
-      {% block datasets %}
-      {% endblock %}
-    </ul>
-  </li>
-</ul>
+  <h2>{% block name %}Sample Catalog Name{% endblock %}</h2>
+  <h3>Child Catalogs</h3>
+  <ul class="list-group">
+    {% block catalogs %}
+    {% endblock %}
+  </ul>
+  <h3>Datasets</h3>
+  <ul class="list-group">
+    {% block datasets %}
+    {% endblock %}
+  </ul>
 
 </div>
 
