@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main role="main" class="container">
+  <h1>Pangeo Catalog</h1>
+  <div>
+    <ol class="breadcrumb">
+      {% block crumbs %}
+      {% for crumb in crumbs %}
+      {{ crumb | safe}}
+      {% endfor %}
+      {% endblock %}
+    </ol>
+  </div>
+  <div class="xarray">
+    <h2>{% block name %}{{ cat.name }} &mdash; {{ cat.description }}{% endblock %}</h2>
+    <ul class="list-group">
+      <li class="list-group-item">
+        {{ cat.to_dask()._repr_html_() | safe }}
+      </li>
+    </ul>
+  </div>
+</main>
+{% endblock %}
