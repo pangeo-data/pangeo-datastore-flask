@@ -1,11 +1,14 @@
 # pangeo-datastore-flask
 
-Dynamic implementation of pangeo-datastore using Flask, deployed through App Engine.
+Dynamic implementation of pangeo-datastore using Flask, deployed through Google App Engine.
 
-To deploy locally:
+To deploy this website locally:
 
 ```
-conda env create -f environment.yml
-conda activate pangeo-datastore
-python catalog.py
+git clone https://github.com/pangeo-data/pangeo-datastore-flask.git
+cd pangeo-datastore-flask
+conda env create -n pangeo-datastore-flask python=3.7
+conda activate pangeo-datastore-flask
+pip install -r requirements.txt
+python main.py
 ```
