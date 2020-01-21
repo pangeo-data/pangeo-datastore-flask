@@ -1,9 +1,13 @@
-# pangeo-datastore-flask
+# Pangeo Cloud Datastore
 
-Dynamic implementation of pangeo-datastore using Flask, deployed through Google App Engine.
+Dynamic implementation of Pangeo Cloud Datastore using Flask, deployed through Google App Engine.
 
-To deploy this website locally:
+[https://pangeo-181919.appspot.com/](https://pangeo-181919.appspot.com/)
 
+## Build Status 
+TODO
+
+## Deploying Locally
 ```
 git clone https://github.com/pangeo-data/pangeo-datastore-flask.git
 cd pangeo-datastore-flask
