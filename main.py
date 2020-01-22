@@ -31,6 +31,7 @@ def parse(path):
             crumbs.append(f'<li><a href="{url}">{item}</a></li>')
         else:
             crumbs.append(f'<li class="active">{item}</li>')
+        parent = cat
         cat = cat[item]
 
     if cat.container == "catalog": # only render Intake catalogs
@@ -39,6 +40,7 @@ def parse(path):
                                                crumbs=crumbs)
     elif cat.container == "xarray":
         return render_template("xarray.html", cat=cat,
+                                              parent=parent, item=item,
                                               url=request.base_url.rstrip("/"),
                                               crumbs=crumbs)
 

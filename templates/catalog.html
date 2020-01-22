@@ -15,94 +15,40 @@
     </ol>
   </div>
   <div class="catalog">
-    <h2>{% block name %}{{ cat.name }} &mdash; {{ cat.description }}{% endblock %}</h2>
+
+    {% block name %}
+    <h2>{{ cat.name }}</h2>
+    <p class="description">{{ cat.description }}</p>
+    <pre><code>{{ cat.path }}</code></pre>
+    {% endblock %}
+
+    {% block catalogs %}
     <h3>Child Catalogs</h3>
-    <ul class="list-group">
-      {% block catalogs %}
+    <div class="list-group">
       {% for item in cat._entries %}
       {% if cat[item].container == "catalog" %}
-      <li class="list-group-item">
-        <h3>
-          <a href="{{ url }}/{{ item }}">
-            {{ item }} &mdash; {{ cat[item].description }}
-          </a>
-        </h3>
-      </li>
+      <a  href="{{ url }}/{{ item }}" class="list-group-item">
+        <h4>{{ item }}</h4>
+        <p class="description">{{ cat[item].description }}</p>
+      </a>
       {% endif %}
       {% endfor %}
-      {% endblock %}
-    </ul>
+    </div>
+    {% endblock %}
+
     <h3>Datasets</h3>
-    <ul class="list-group">
+    <div class="list-group">
       {% block datasets %}
       {% for item in cat._entries %}
       {% if cat[item].container == "xarray" %}
-      <li class="list-group-item">
-        <h3>
-          <a href="{{ url }}/{{ item }}">
-            {{ cat[item].name }} &mdash; {{ cat[item].description }}
-          </a>
-        </h3>
-        <div class="panel-group" id="accordion-{{ item }}" role="tablist" aria-multiselectable="true">
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="headingPython-{{ item }}">
-              <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion-{{ item }}" href="#collapsePython-{{ item }}" aria-expanded="false" aria-controls="collapsePython-{{ item }}">
-                  load in python
-                </a>
-              </h4>
-            </div>
-            <div id="collapsePython-{{ item }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingPython-{{ item }}">
-              <div class="panel-body">
-                <pre><code class="language-python">from intake import open_catalog<br>
-cat = open_catalog("{{ cat.path }}")
-ds  = cat["{{ item }}"].to_dask()</code></pre>
-              </div>
-            </div>
-          </div>
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="headingMetadata-{{ item }}">
-              <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion-{{ item }}" href="#collapseMetadata-{{ item }}" aria-expanded="false" aria-controls="collapseMetadata-{{ item }}">
-                  metadata
-                </a>
-              </h4>
-            </div>
-            <div id="collapseMetadata-{{ item }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingMetadata-{{ item }}">
-              <div class="panel-body">
-                <table class="table table-condensed table-hover">
-                  <tbody>
-                    {% for data in cat[item].metadata %}
-                    <tr>
-                      <td>{{ data }}</td>
-                      <td>{{ cat[item].metadata[data] }}</td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="headingPreview-{{ item }}">
-              <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion-{{ item }}" href="#collapsePreview-{{ item }}" id="buttonPreview-{{ item }}" aria-expanded="false" aria-controls="collapsePreview-{{ item }}">
-                  xarray preview
-                </a>
-              </h4>
-            </div>
-            <div id="collapsePreview-{{ item }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingPreview-{{ item }}">
-              <div class="panel-body">
-                Still working on a way to load xarray previews asynchronously; for now try clicking the name of the dataset.
-              </div>
-            </div>
-          </div>
-        </div>
-      </li>
+      <a  href="{{ url }}/{{ item }}" class="list-group-item">
+          <h4>{{ item }}</h4>
+          <p class="description">{{ cat[item].description }}</p>
+      </a>
       {% endif %}
       {% endfor %}
       {% endblock %}
-    </ul>
+    </div>
   </div>
 </main>
 {% endblock%}
