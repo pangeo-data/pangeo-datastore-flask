@@ -4,23 +4,32 @@ import xarray as xr
 
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
+from flask_caching import Cache
+
+cache = Cache(config={'CACHE_TYPE': 'simple',
+                      'CACHE_DEFAULT_TIMEOUT': 300})
 
 app = Flask(__name__)
 Bootstrap(app)
+cache.init_app(app)
 
 xr.set_options(display_style="html")
 
 catalog_dir = "https://raw.githubusercontent.com/pangeo-data/pangeo-datastore/master/intake-catalogs/"
 master = intake.open_catalog(catalog_dir + "master.yaml")
 
+
 @app.route('/')
+@cache.cached()
 def root():
     crumbs = ['<li class="active">master</li>']
     return render_template("catalog.html", cat=master,
-                                           url=request.base_url.rstrip("/"),
-                                           crumbs=crumbs)
+                           url=request.base_url.rstrip("/"),
+                           crumbs=crumbs)
+
 
 @app.route('/<path:path>')
+@cache.cached()
 def parse(path):
     url = request.url_root.rstrip("/")
     cat = master
@@ -34,15 +43,16 @@ def parse(path):
         parent = cat
         cat = cat[item]
 
-    if cat.container == "catalog": # only render Intake catalogs
+    if cat.container == "catalog":  # only render Intake catalogs
         return render_template("catalog.html", cat=cat,
-                                               url=request.base_url.rstrip("/"),
-                                               crumbs=crumbs)
+                               url=request.base_url.rstrip("/"),
+                               crumbs=crumbs)
     elif cat.container == "xarray":
         return render_template("xarray.html", cat=cat,
-                                              parent=parent, item=item,
-                                              url=request.base_url.rstrip("/"),
-                                              crumbs=crumbs)
+                               parent=parent, item=item,
+                               url=request.base_url.rstrip("/"),
+                               crumbs=crumbs)
+
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
