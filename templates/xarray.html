@@ -38,11 +38,9 @@ ds  = cat["{{ item }}"].to_dask()</code></pre>
 
   <div class="xarray">
     <h3>Dataset Contents</h3>
-    <ul class="list-group">
-      <li class="list-group-item">
+    <div class="xarray-repr">
         {{ cat.to_dask()._repr_html_() | safe }}
-      </li>
-    </ul>
+    </div>
   </div>
 
 </main>
