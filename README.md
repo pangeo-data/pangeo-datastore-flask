@@ -2,7 +2,7 @@
 
 Dynamic implementation of Pangeo Cloud Datastore using Flask, deployed through Google App Engine.
 
-[https://pangeo-181919.appspot.com/](https://pangeo-181919.appspot.com/)
+[https://catalog.pangeo.io/](https://catalog.pangeo.io/)
 
 ![Cloud Build](https://storage.googleapis.com/pangeo-181919-badges/builds/pangeo-datastore-flask/branches/master.svg)
 
