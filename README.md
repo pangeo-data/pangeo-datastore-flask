@@ -4,10 +4,10 @@ Dynamic implementation of Pangeo Cloud Datastore using Flask, deployed through G
 
 [https://pangeo-181919.appspot.com/](https://pangeo-181919.appspot.com/)
 
-## Build Status 
-TODO
+![Cloud Build](https://storage.googleapis.com/pangeo-181919-badges/builds/pangeo-datastore-flask/branches/master.svg)
 
-## Deploying Locally
+To deploy locally:
+
 ```
 git clone https://github.com/pangeo-data/pangeo-datastore-flask.git
 cd pangeo-datastore-flask
