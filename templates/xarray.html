@@ -40,7 +40,7 @@ ds  = cat["{{ item }}"].to_dask()</code></pre>
     <h3>Dataset Contents</h3>
     <ul class="list-group">
       <li class="list-group-item">
-        
+        {{ cat.to_dask()._repr_html_() | safe }}
       </li>
     </ul>
   </div>
