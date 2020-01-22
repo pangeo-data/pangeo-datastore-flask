@@ -12,13 +12,38 @@
       {% endblock %}
     </ol>
   </div>
+  <div class="info">
+    {% block name %}
+    <h2>{{ cat.name }}</h2>
+    <p class="description">{{ cat.description }}</p>
+    {% endblock %}
+
+    <h3>Load in Python</h3>
+    <pre><code class="language-python">from intake import open_catalog<br>
+cat = open_catalog("{{ parent.path }}")
+ds  = cat["{{ item }}"].to_dask()</code></pre>
+
+    <h3>Metadata</h3>
+    <table class="table table-condensed table-hover">
+      <tbody>
+        {% for data in cat.metadata %}
+        <tr>
+          <td>{{ data }}</td>
+          <td>{{ cat.metadata[data] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
   <div class="xarray">
-    <h2>{% block name %}{{ cat.name }} &mdash; {{ cat.description }}{% endblock %}</h2>
+    <h3>Dataset Contents</h3>
     <ul class="list-group">
       <li class="list-group-item">
-        {{ cat.to_dask()._repr_html_() | safe }}
+        
       </li>
     </ul>
   </div>
+
 </main>
 {% endblock %}
