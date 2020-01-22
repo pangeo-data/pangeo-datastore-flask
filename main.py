@@ -7,7 +7,7 @@ from flask_bootstrap import Bootstrap
 from flask_caching import Cache
 
 cache = Cache(config={'CACHE_TYPE': 'simple',
-                      'CACHE_DEFAULT_TIMEOUT': 300})
+                      'CACHE_DEFAULT_TIMEOUT': 1800})
 
 app = Flask(__name__)
 Bootstrap(app)
