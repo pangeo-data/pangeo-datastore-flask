@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ cat.description }}{% endblock %}
+
+{% block content %}
+<main role="main" class="container">
+  <h1>Pangeo Catalog</h1>
+  <div>
+    <ol class="breadcrumb">
+      {% block crumbs %}
+      {% for crumb in crumbs %}
+      {{ crumb | safe}}
+      {% endfor %}
+      {% endblock %}
+    </ol>
+  </div>
+  <div class="info">
+    {% block name %}
+    <h2>{{ cat.name }}</h2>
+    <p class="description">{{ cat.description }}</p>
+    {% endblock %}
+
+    <h3>Load in Python</h3>
+    <pre><code class="language-python">from intake import open_catalog<br>
+cat = open_catalog("{{ parent.path }}")
+ds  = cat.{{ item }}()</code></pre>
+
+    <h3>Metadata</h3>
+    <table class="table table-condensed table-hover">
+      <tbody>
+        {% for data in cat.metadata %}
+        <tr>
+          <td>{{ data }}</td>
+          <td>{{ cat.metadata[data] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="xarray">
+    <h3>Dataset Contents</h3>
+    <div class="xarray-repr">
+        {{ cat.df.to_html(max_rows=10) | safe }}
+    </div>
+  </div>
+
+</main>
+{% endblock %}
