@@ -30,7 +30,7 @@ def root():
 
 
 @app.route('/<path:path>')
-#@cache.cached()
+@cache.cached()
 def parse(path):
     url = request.url_root.rstrip("/")
     cat = master
