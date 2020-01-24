@@ -1,5 +1,36 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='jquery.json-viewer.js')}}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='papaparse.min.js')}}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='make-grid.js')}}" charset="utf-8"></script>
+<script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#json-renderer').jsonViewer({{ json | safe }}, {
+      collapsed: true,
+      rootCollapsable: false
+    });
+    Papa.parse("{{ json["catalog_file"] | safe }}", {
+      download: true,
+      header: true,
+      complete: function(results) {
+        makeGrid(results);
+      }
+    });
+  });
+</script>
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<link href="{{url_for('static', filename='jquery.json-viewer.css')}}" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+{% endblock %}
+
 {% block title %}{{ cat.description }}{% endblock %}
 
 {% block content %}
@@ -26,24 +57,16 @@ cat = open_catalog("{{ parent.path }}")
 ds  = cat.{{ item }}()</code></pre>
 
     <h3>Metadata</h3>
-    <table class="table table-condensed table-hover">
-      <tbody>
-        {% for data in cat.metadata %}
-        <tr>
-          <td>{{ data }}</td>
-          <td>{{ cat.metadata[data] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <pre id="json-renderer"></pre>
   </div>
 
   <div class="xarray">
     <h3>Dataset Contents</h3>
-    <div class="xarray-repr">
-        {{ cat.df.to_html(max_rows=100) | safe }}
+    <div style="display: flex; flex-direction: row">
+      <div style="overflow: auto; flex-grow: 1">
+        <div id="myGrid" class="ag-theme-balham" style="height: 600px; width: 100%;"></div>
+      </div>
     </div>
   </div>
-
 </main>
 {% endblock %}

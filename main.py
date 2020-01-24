@@ -1,5 +1,6 @@
 # [START gae_python37_render_template]
 import intake
+import requests
 import xarray as xr
 
 from flask import Flask, render_template, request
@@ -29,7 +30,7 @@ def root():
 
 
 @app.route('/<path:path>')
-@cache.cached()
+#@cache.cached()
 def parse(path):
     url = request.url_root.rstrip("/")
     cat = master
@@ -54,10 +55,11 @@ def parse(path):
                                    url=request.base_url.rstrip("/"),
                                    crumbs=crumbs)
         elif cat._driver == "intake_esm.esm_datastore":
+            r = requests.get(cat.esmcol_path)
             return render_template("xarray_esm.html", cat=cat,
                                    parent=parent, item=item,
                                    url=request.base_url.rstrip("/"),
-                                   crumbs=crumbs)
+                                   crumbs=crumbs, json=r.json())
 
 
 if __name__ == '__main__':
