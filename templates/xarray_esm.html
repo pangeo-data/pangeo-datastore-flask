@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='jquery.json-viewer.js')}}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='papaparse.min.js')}}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='make-grid.js')}}" charset="utf-8"></script>
+<script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#json-renderer').jsonViewer({{ json | safe }}, {
+      collapsed: true,
+      rootCollapsable: false
+    });
+    Papa.parse("{{ json["catalog_file"] | safe }}", {
+      download: true,
+      header: true,
+      complete: function(results) {
+        makeGrid(results);
+      }
+    });
+  });
+</script>
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<link href="{{url_for('static', filename='jquery.json-viewer.css')}}" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+{% endblock %}
+
+{% block title %}{{ cat.description }}{% endblock %}
+
+{% block content %}
+<main role="main" class="container">
+  <h1>Pangeo Catalog</h1>
+  <div>
+    <ol class="breadcrumb">
+      {% block crumbs %}
+      {% for crumb in crumbs %}
+      {{ crumb | safe}}
+      {% endfor %}
+      {% endblock %}
+    </ol>
+  </div>
+  <div class="info">
+    {% block name %}
+    <h2>{{ cat.name }}</h2>
+    <p class="description">{{ cat.description }}</p>
+    {% endblock %}
+
+    <h3>Load in Python</h3>
+    <pre><code class="language-python">from intake import open_catalog<br>
+cat = open_catalog("{{ parent.path }}")
+ds  = cat.{{ item }}()</code></pre>
+
+    <h3>Metadata</h3>
+    <pre id="json-renderer"></pre>
+  </div>
+
+  <div class="xarray">
+    <h3>Dataset Contents</h3>
+    <div style="display: flex; flex-direction: row">
+      <div style="overflow: auto; flex-grow: 1">
+        <div id="myGrid" class="ag-theme-balham" style="height: 600px; width: 100%;"></div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
