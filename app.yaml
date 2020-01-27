@@ -1,5 +1,10 @@
 runtime: python37
 
+# We'll need to fool around to find the optimal instance_class and max_concurrent_requests
+instance_class: F2
+automatic_scaling:
+  max_concurrent_requests: 10 # default
+
 handlers:
   # This configures Google App Engine to serve the files in the app's static
   # directory.
