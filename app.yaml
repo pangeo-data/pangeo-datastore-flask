@@ -1,7 +1,7 @@
 runtime: python37
 
 # We'll need to fool around to find the optimal instance_class and max_concurrent_requests
-instance_class: F1
+instance_class: F2
 automatic_scaling:
   max_concurrent_requests: 10 # default
 
