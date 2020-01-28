@@ -10,16 +10,19 @@ from flask_caching import Cache
 from flask_seasurf import SeaSurf
 from flask_talisman import Talisman
 
-cache = Cache(config={'CACHE_TYPE': 'simple',
-                      'CACHE_DEFAULT_TIMEOUT': 1800})
-
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
 csrf = SeaSurf(app)
 
-Bootstrap(app)
+csp = {"default-src": "*",
+       "script-src": "'unsafe-inline'"}
+Talisman(app, content_security_policy=csp)
+
+cache = Cache(config={'CACHE_TYPE': 'simple',
+                      'CACHE_DEFAULT_TIMEOUT': 1800})
+
 cache.init_app(app)
-Talisman(app)
+Bootstrap(app)
 
 xr.set_options(display_style="html")
 
