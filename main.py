@@ -1,18 +1,25 @@
 # [START gae_python37_render_template]
 import intake
+import os
 import requests
 import xarray as xr
 
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 from flask_caching import Cache
+from flask_seasurf import SeaSurf
+from flask_talisman import Talisman
 
 cache = Cache(config={'CACHE_TYPE': 'simple',
                       'CACHE_DEFAULT_TIMEOUT': 1800})
 
 app = Flask(__name__)
+app.secret_key = os.urandom(16)
+csrf = SeaSurf(app)
+
 Bootstrap(app)
 cache.init_app(app)
+Talisman(app)
 
 xr.set_options(display_style="html")
 
