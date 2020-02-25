@@ -25,6 +25,7 @@ csp = {"style-src": ["'self'",
                       "https://unpkg.com",
                       "'unsafe-inline'"],
        "font-src": ["'self'",
+                    "data:",
                     "https://cdnjs.cloudflare.com",
                     "https://fonts.gstatic.com"]}
 Talisman(app, content_security_policy=csp)
