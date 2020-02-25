@@ -16,10 +16,13 @@ csrf = SeaSurf(app)
 
 csp = {"style-src": ["'self'",
                      "https://cdnjs.cloudflare.com",
+                     "https://cdn.datatables.net",
+                     "https://unpkg.com",
                      "https://fonts.googleapis.com",
                      "'unsafe-inline'"],
        "script-src": ["'self'",
                       "https://cdnjs.cloudflare.com",
+                      "https://unpkg.com",
                       "'unsafe-inline'"],
        "font-src": ["'self'",
                     "https://cdnjs.cloudflare.com",
