@@ -3,6 +3,8 @@ distributed==2.9.1
 Flask==1.1.1
 Flask-Bootstrap==3.3.7.1
 Flask-Caching==1.8.0
+Flask-SeaSurf==0.2.2
+flask-talisman==0.7.0
 gcsfs==0.6.0
 intake==0.5.4
 intake-esm==2019.12.13
