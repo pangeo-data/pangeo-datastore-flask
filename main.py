@@ -45,6 +45,7 @@ master = intake.open_catalog(catalog_dir + "master.yaml")
 @app.route('/')
 @cache.cached()
 def root():
+    print("hello world!")
     crumbs = ['<li class="active">master</li>']
     return render_template("catalog.html", cat=master,
                            url=request.base_url.rstrip("/"),
