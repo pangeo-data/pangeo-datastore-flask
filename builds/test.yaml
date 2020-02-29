@@ -1,1 +1,4 @@
-
+steps:
+- name: "ubuntu"
+  args: ["python", "--version"]
+timeout: "1600s"
