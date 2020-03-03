@@ -14,8 +14,20 @@ app = Flask(__name__)
 app.secret_key = os.urandom(16)
 csrf = SeaSurf(app)
 
-csp = {"default-src": "*",
-       "script-src": "'unsafe-inline'"}
+csp = {"style-src": ["'self'",
+                     "https://cdnjs.cloudflare.com",
+                     "https://cdn.datatables.net",
+                     "https://unpkg.com",
+                     "https://fonts.googleapis.com",
+                     "'unsafe-inline'"],
+       "script-src": ["'self'",
+                      "https://cdnjs.cloudflare.com",
+                      "https://unpkg.com",
+                      "'unsafe-inline'"],
+       "font-src": ["'self'",
+                    "data:",
+                    "https://cdnjs.cloudflare.com",
+                    "https://fonts.gstatic.com"]}
 Talisman(app, content_security_policy=csp)
 
 cache = Cache(config={'CACHE_TYPE': 'simple',
