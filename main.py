@@ -56,6 +56,7 @@ def root():
 @cache.cached()
 def parse(path):
     try:
+        # collect crumbs and search for entry
         url = request.url_root.rstrip("/")
         cat = master
         crumbs = [f'<li><a href="{url}">master</a></li>']
@@ -67,25 +68,28 @@ def parse(path):
                 crumbs.append(f'<li class="active">{item}</li>')
             parent = cat
             cat = cat[item]
-
-        if cat.container == "catalog":  # only render Intake catalogs
+        # intake catalogs
+        if cat.container == "catalog":
             return render_template("catalog.html", cat=cat,
                                    url=request.base_url.rstrip("/"),
                                    crumbs=crumbs)
-        elif cat.container == "xarray":
-            if cat._driver in ["zarr", "rasterio"]:
-                return render_template("xarray_zarr.html", cat=cat,
-                                       parent=parent, item=item,
-                                       url=request.base_url.rstrip("/"),
-                                       crumbs=crumbs)
-            elif cat._driver == "intake_esm.esm_datastore":
-                r = requests.get(cat.esmcol_path)
-                return render_template("xarray_esm.html", cat=cat,
-                                       parent=parent, item=item,
-                                       url=request.base_url.rstrip("/"),
-                                       crumbs=crumbs, json=r.json())
+        # intake-esm collections
+        elif cat._driver == "intake_esm.esm_datastore":
+            r = requests.get(cat.esmcol_path)
+            return render_template("esmcol.html", cat=cat,
+                                   parent=parent, item=item,
+                                   url=request.base_url.rstrip("/"),
+                                   crumbs=crumbs, json=r.json())
+        # anything that can be handled with `to_dask()`
+        elif cat.container in ["dataframe", "xarray"]:
+            return render_template("dask.html", cat=cat,
+                                   parent=parent, item=item,
+                                   url=request.base_url.rstrip("/"),
+                                   crumbs=crumbs)
+        # generic error for anything else
         else:
-            raise NotImplementedError(f"This type of dataset isn't recognized: {cat.container}, {cat._driver}")
+            raise NotImplementedError(f"This type of dataset isn't recognized: \
+                                      {cat.container}, {cat._driver}")
     except:
         type, value = sys.exc_info()[:2]
         return render_template("error.html", type=type, value=value), 500

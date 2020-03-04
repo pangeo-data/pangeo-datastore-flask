@@ -41,7 +41,11 @@ ds  = cat["{{ item }}"].to_dask()</code></pre>
   <div class="xarray">
     <h3>Dataset Contents</h3>
     <div class="xarray-repr">
-        {{ cat.to_dask()._repr_html_() | safe }}
+        {% if cat.container == "dataframe" %}
+          {{ cat.to_dask().to_html() | safe }}
+        {% elif cat.container == "xarray" %}
+          {{ cat.to_dask()._repr_html_() | safe }}
+        {% endif %}
     </div>
   </div>
 
