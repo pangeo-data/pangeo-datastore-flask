@@ -40,7 +40,7 @@
     <div class="list-group">
       {% block datasets %}
       {% for item in cat._entries %}
-      {% if cat[item].container == "xarray" %}
+      {% if cat[item].container in ["xarray", "dataframe"] %}
       <a  href="{{ url }}/{{ item }}" class="list-group-item">
           <h4>{{ item }}</h4>
           <p class="description">{{ cat[item].description }}</p>
