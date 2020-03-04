@@ -2,6 +2,7 @@
 import intake
 import os
 import requests
+import sys
 import xarray as xr
 
 from flask import Flask, render_template, request
@@ -54,35 +55,40 @@ def root():
 @app.route('/<path:path>')
 @cache.cached()
 def parse(path):
-    url = request.url_root.rstrip("/")
-    cat = master
-    crumbs = [f'<li><a href="{url}">master</a></li>']
-    for item in path.rstrip("/").split("/"):
-        url += f"/{item}"
-        if url != request.base_url:
-            crumbs.append(f'<li><a href="{url}">{item}</a></li>')
-        else:
-            crumbs.append(f'<li class="active">{item}</li>')
-        parent = cat
-        cat = cat[item]
+    try:
+        url = request.url_root.rstrip("/")
+        cat = master
+        crumbs = [f'<li><a href="{url}">master</a></li>']
+        for item in path.rstrip("/").split("/"):
+            url += f"/{item}"
+            if url != request.base_url:
+                crumbs.append(f'<li><a href="{url}">{item}</a></li>')
+            else:
+                crumbs.append(f'<li class="active">{item}</li>')
+            parent = cat
+            cat = cat[item]
 
-    if cat.container == "catalog":  # only render Intake catalogs
-        return render_template("catalog.html", cat=cat,
-                               url=request.base_url.rstrip("/"),
-                               crumbs=crumbs)
-    elif cat.container == "xarray":
-        if cat._driver == "zarr":
-            return render_template("xarray_zarr.html", cat=cat,
-                                   parent=parent, item=item,
+        if cat.container == "catalog":  # only render Intake catalogs
+            return render_template("catalog.html", cat=cat,
                                    url=request.base_url.rstrip("/"),
                                    crumbs=crumbs)
-        elif cat._driver == "intake_esm.esm_datastore":
-            r = requests.get(cat.esmcol_path)
-            return render_template("xarray_esm.html", cat=cat,
-                                   parent=parent, item=item,
-                                   url=request.base_url.rstrip("/"),
-                                   crumbs=crumbs, json=r.json())
-
+        elif cat.container == "xarray":
+            if cat._driver in ["zarr", "rasterio"]:
+                return render_template("xarray_zarr.html", cat=cat,
+                                       parent=parent, item=item,
+                                       url=request.base_url.rstrip("/"),
+                                       crumbs=crumbs)
+            elif cat._driver == "intake_esm.esm_datastore":
+                r = requests.get(cat.esmcol_path)
+                return render_template("xarray_esm.html", cat=cat,
+                                       parent=parent, item=item,
+                                       url=request.base_url.rstrip("/"),
+                                       crumbs=crumbs, json=r.json())
+        else:
+            raise NotImplementedError(f"This type of dataset isn't recognized: {cat.container}, {cat._driver}")
+    except:
+        type, value = sys.exc_info()[:2]
+        return render_template("error.html", type=type, value=value), 500
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
