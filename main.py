@@ -84,8 +84,8 @@ def parse(path):
                                        parent=parent, item=item,
                                        url=request.base_url.rstrip("/"),
                                        crumbs=crumbs, json=r.json())
-            else:
-                raise NotImplementedError(f"This type of dataset isn't recognized: {cat.container}, {cat._driver}")
+        else:
+            raise NotImplementedError(f"This type of dataset isn't recognized: {cat.container}, {cat._driver}")
     except:
         type, value = sys.exc_info()[:2]
         return render_template("error.html", type=type, value=value), 500
