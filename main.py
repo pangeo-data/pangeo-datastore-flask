@@ -94,6 +94,13 @@ def parse(path):
         type, value = sys.exc_info()[:2]
         return render_template("error.html", type=type, value=value), 500
 
+      
+@app.route('/favicon.ico')
+@cache.cached()
+def favicon():
+  return redirect(url_for('static', filename='favicon.ico'))
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
 # [START gae_python37_render_template]
