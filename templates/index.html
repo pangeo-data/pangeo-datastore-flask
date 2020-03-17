@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Pangeo Catalog{% endblock %}
+
+{% block content %}
+<main role="main" class="container">
+  <h1>Pangeo Catalog</h1>
+  This website hosts an online view of the Pangeo Datastore, which resides on <a href="https://github.com/pangeo-data/pangeo-datastore">Github</a>:
+  <br><br>
+  <pre><code class="language-python">from intake import open_catalog<br>
+cat = open_catalog("https://raw.githubusercontent.com/pangeo-data/pangeo-datastore/master/intake-catalogs/master.yaml")
+list(cat)</code></pre><br>
+  Most of the datasets available are stored in cloud-friendly formats like <a href="https://zarr.readthedocs.io/">zarr</a> and are meant to be opened with <a href="http://xarray.pydata.org/">xarray</a>. Though there is no standard catalog format, our catalogs currently rely upon <a href="https://intake.readthedocs.io/">Intake</a> and <a href="https://github.com/NCAR/intake-esm">Intake-esm</a>.
+  <br><br>
+  <a href="{{ url_for('browse', path='master') }}">Browse the master catalog</a>
+</main>
+{% endblock%}

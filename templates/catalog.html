@@ -27,7 +27,7 @@
     <div class="list-group">
       {% for item in cat._entries %}
       {% if cat[item].container == "catalog" %}
-      <a  href="{{ url }}/{{ item }}" class="list-group-item">
+      <a  href="{{ url_for('browse', path='%s/%s' % (path, item)) }}" class="list-group-item">
         <h4>{{ item }}</h4>
         <p class="description">{{ cat[item].description }}</p>
       </a>
@@ -41,7 +41,7 @@
       {% block datasets %}
       {% for item in cat._entries %}
       {% if cat[item].container in ["xarray", "dataframe"] %}
-      <a  href="{{ url }}/{{ item }}" class="list-group-item">
+      <a  href="{{ url_for('browse', path='%s/%s' % (path, item)) }}" class="list-group-item">
           <h4>{{ item }}</h4>
           <p class="description">{{ cat[item].description }}</p>
       </a>

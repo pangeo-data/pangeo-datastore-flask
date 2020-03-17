@@ -12,7 +12,7 @@ from flask_seasurf import SeaSurf
 from flask_talisman import Talisman
 
 app = Flask(__name__)
-'''app.secret_key = os.urandom(16)
+app.secret_key = os.urandom(16)
 csrf = SeaSurf(app)
 
 csp = {'style-src': ["'self'",
@@ -29,7 +29,7 @@ csp = {'style-src': ["'self'",
                     'data:',
                     'https://cdnjs.cloudflare.com',
                     'https://fonts.gstatic.com']}
-Talisman(app, content_security_policy=csp)'''
+Talisman(app, content_security_policy=csp)
 
 cache = Cache(config={'CACHE_TYPE': 'simple',
                       'CACHE_DEFAULT_TIMEOUT': 1800})
@@ -43,18 +43,18 @@ catalog_dir = 'https://raw.githubusercontent.com/pangeo-data/pangeo-datastore/ma
 master = intake.open_catalog(catalog_dir)
 
 
-'''@app.route('/')
+@app.route('/')
 @cache.cached()
 def index():
-    pass'''
+    return render_template('index.html')
 
 
-@app.route('/browse/<path:path>')
+@app.route('/browse/<path:path>/')
 @cache.cached()
 def browse(path):
     try:
         # check if entry is in pangeo catalog or remote catalog
-        items = path.rstrip('/').split('/')
+        items = path.split('/')
         if items[0] == 'master':
             cat = master
         else:
@@ -62,8 +62,7 @@ def browse(path):
         # create breadcrumbs for root catalog
         if len(items) == 1:
             crumbs = ['<li class="active">%s</li>' % cat.name]
-            return render_template('catalog.html', cat=cat, crumbs=crumbs,
-                                   url=request.base_url.rstrip('/'))
+            return render_template('catalog.html', cat=cat, crumbs=crumbs, path=path)
         else:
             crumbs = ['<li><a href="%s">%s</a></li>' %
                     (url_for('browse', path='/'.join(items[0:1])), cat.name)]
@@ -77,13 +76,11 @@ def browse(path):
                 crumbs.append('<li class="active">%s</li>' % item)
         # intake catalogs
         if cat.container == 'catalog':
-            return render_template('catalog.html', cat=cat, crumbs=crumbs,
-                                   url=request.base_url.rstrip('/'))
+            return render_template('catalog.html', cat=cat, crumbs=crumbs, path=path)
         # intake-esm collections
         elif cat._driver == 'intake_esm.esm_datastore':
             r = requests.get(cat.esmcol_path)
-            return render_template('esmcol.html', cat=cat, crumbs=crumbs,
-                                   json=r.json())
+            return render_template('esmcol.html', cat=cat, crumbs=crumbs, json=r.json())
         # anything that can be handled with `to_dask()`
         elif cat.container in ['dataframe', 'xarray']:
             return render_template('dask.html', cat=cat, crumbs=crumbs)
