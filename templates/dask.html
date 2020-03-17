@@ -22,8 +22,8 @@
 
     <h3>Load in Python</h3>
     <pre><code class="language-python">from intake import open_catalog<br>
-cat = open_catalog("{{ parent.path }}")
-ds  = cat["{{ item }}"].to_dask()</code></pre>
+cat = open_catalog("{{ cat.catalog_object.path }}")
+ds  = cat["{{ cat.name }}"].to_dask()</code></pre>
 
     <h3>Metadata</h3>
     <table class="table table-condensed table-hover">

@@ -12,24 +12,24 @@ from flask_seasurf import SeaSurf
 from flask_talisman import Talisman
 
 app = Flask(__name__)
-app.secret_key = os.urandom(16)
+'''app.secret_key = os.urandom(16)
 csrf = SeaSurf(app)
 
-csp = {"style-src": ["'self'",
-                     "https://cdnjs.cloudflare.com",
-                     "https://cdn.datatables.net",
-                     "https://unpkg.com",
-                     "https://fonts.googleapis.com",
+csp = {'style-src': ["'self'",
+                     'https://cdnjs.cloudflare.com',
+                     'https://cdn.datatables.net',
+                     'https://unpkg.com',
+                     'https://fonts.googleapis.com',
                      "'unsafe-inline'"],
-       "script-src": ["'self'",
-                      "https://cdnjs.cloudflare.com",
-                      "https://unpkg.com",
+       'script-src': ["'self'",
+                      'https://cdnjs.cloudflare.com',
+                      'https://unpkg.com',
                       "'unsafe-inline'"],
-       "font-src": ["'self'",
-                    "data:",
-                    "https://cdnjs.cloudflare.com",
-                    "https://fonts.gstatic.com"]}
-Talisman(app, content_security_policy=csp)
+       'font-src': ["'self'",
+                    'data:',
+                    'https://cdnjs.cloudflare.com',
+                    'https://fonts.gstatic.com']}
+Talisman(app, content_security_policy=csp)'''
 
 cache = Cache(config={'CACHE_TYPE': 'simple',
                       'CACHE_DEFAULT_TIMEOUT': 1800})
@@ -37,64 +37,65 @@ cache = Cache(config={'CACHE_TYPE': 'simple',
 cache.init_app(app)
 Bootstrap(app)
 
-xr.set_options(display_style="html")
+xr.set_options(display_style='html')
 
-catalog_dir = "https://raw.githubusercontent.com/pangeo-data/pangeo-datastore/master/intake-catalogs/"
-master = intake.open_catalog(catalog_dir + "master.yaml")
+catalog_dir = 'https://raw.githubusercontent.com/pangeo-data/pangeo-datastore/master/intake-catalogs/master.yaml'
+master = intake.open_catalog(catalog_dir)
 
 
-@app.route('/')
+'''@app.route('/')
 @cache.cached()
-def root():
-    crumbs = ['<li class="active">master</li>']
-    return render_template("catalog.html", cat=master,
-                           url=request.base_url.rstrip("/"),
-                           crumbs=crumbs)
+def index():
+    pass'''
 
 
-@app.route('/<path:path>')
+@app.route('/browse/<path:path>')
 @cache.cached()
-def parse(path):
+def browse(path):
     try:
-        # collect crumbs and search for entry
-        url = request.url_root.rstrip("/")
-        cat = master
-        crumbs = [f'<li><a href="{url}">master</a></li>']
-        for item in path.rstrip("/").split("/"):
-            url += f"/{item}"
-            if url != request.base_url:
-                crumbs.append(f'<li><a href="{url}">{item}</a></li>')
-            else:
-                crumbs.append(f'<li class="active">{item}</li>')
-            parent = cat
+        # check if entry is in pangeo catalog or remote catalog
+        items = path.rstrip('/').split('/')
+        if items[0] == 'master':
+            cat = master
+        else:
+            raise NotImplementedError('Remote catalogs not currrently supported')
+        # create breadcrumbs for root catalog
+        if len(items) == 1:
+            crumbs = ['<li class="active">%s</li>' % cat.name]
+            return render_template('catalog.html', cat=cat, crumbs=crumbs,
+                                   url=request.base_url.rstrip('/'))
+        else:
+            crumbs = ['<li><a href="%s">%s</a></li>' %
+                    (url_for('browse', path='/'.join(items[0:1])), cat.name)]
+        # generate other breadcrumbs and search for entry
+        for i, item in enumerate(items[1:]):
             cat = cat[item]
+            if items[0:i+2] != items:
+                crumbs.append('<li><a href="%s">%s</a></li>' %
+                    (url_for('browse', path='/'.join(items[0:i+2])), item))
+            else:
+                crumbs.append('<li class="active">%s</li>' % item)
         # intake catalogs
-        if cat.container == "catalog":
-            return render_template("catalog.html", cat=cat,
-                                   url=request.base_url.rstrip("/"),
-                                   crumbs=crumbs)
+        if cat.container == 'catalog':
+            return render_template('catalog.html', cat=cat, crumbs=crumbs,
+                                   url=request.base_url.rstrip('/'))
         # intake-esm collections
-        elif cat._driver == "intake_esm.esm_datastore":
+        elif cat._driver == 'intake_esm.esm_datastore':
             r = requests.get(cat.esmcol_path)
-            return render_template("esmcol.html", cat=cat,
-                                   parent=parent, item=item,
-                                   url=request.base_url.rstrip("/"),
-                                   crumbs=crumbs, json=r.json())
+            return render_template('esmcol.html', cat=cat, crumbs=crumbs,
+                                   json=r.json())
         # anything that can be handled with `to_dask()`
-        elif cat.container in ["dataframe", "xarray"]:
-            return render_template("dask.html", cat=cat,
-                                   parent=parent, item=item,
-                                   url=request.base_url.rstrip("/"),
-                                   crumbs=crumbs)
+        elif cat.container in ['dataframe', 'xarray']:
+            return render_template('dask.html', cat=cat, crumbs=crumbs)
         # generic error for anything else
         else:
-            raise NotImplementedError(f"This type of dataset isn't recognized: \
-                                      {cat.container}, {cat._driver}")
+            raise NotImplementedError('This type of dataset is not recognized: %s, %s' %
+                                     (cat.container, cat._driver))
     except:
         type, value = sys.exc_info()[:2]
-        return render_template("error.html", type=type, value=value), 500
+        return render_template('error.html', type=type, value=value), 500
 
-      
+
 @app.route('/favicon.ico')
 @cache.cached()
 def favicon():
