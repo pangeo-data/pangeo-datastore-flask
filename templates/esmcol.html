@@ -12,6 +12,15 @@
       collapsed: true,
       rootCollapsable: false
     });
+    {% if 'catalog_file' not in json %}
+    Papa.parse("{{ cat.df.to_csv(index=False, line_terminator='\\n').replace('"', '') }}", {
+      header: true,
+      complete: function(results) {
+        console.log(results);
+        makeGrid(results);
+      }
+    });
+    {% else %}
     Papa.parse("{{ json["catalog_file"] | safe }}", {
       download: true,
       header: true,
@@ -19,6 +28,7 @@
         makeGrid(results);
       }
     });
+    {% endif %}
   });
 </script>
 {% endblock %}
