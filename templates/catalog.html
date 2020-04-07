@@ -19,7 +19,9 @@
     {% block name %}
     <h2>{{ cat.name }}</h2>
     <p class="description">{{ cat.description }}</p>
-    <pre><code>{{ cat.path }}</code></pre>
+    <pre><code class="language-python">from intake import open_catalog<br>
+cat = open_catalog("{{ cat.path }}")
+list(cat)</code></pre><br>
     {% endblock %}
 
     {% block catalogs %}
