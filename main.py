@@ -62,7 +62,9 @@ def browse(path):
         # create breadcrumbs for root catalog
         if len(items) == 1:
             crumbs = ['<li class="active">%s</li>' % cat.name]
-            return render_template('catalog.html', cat=cat, crumbs=crumbs, path=path)
+            return render_template('catalog.html', cat=cat, crumbs=crumbs, path=path,
+                                   catalogs=any([cat[item].container == 'catalog' for item in cat]),
+                                   datasets=any([cat[item].container in ['dataframe', 'xarray'] for item in cat]))
         else:
             crumbs = ['<li><a href="%s">%s</a></li>' %
                     (url_for('browse', path='/'.join(items[0:1])), cat.name)]
@@ -76,7 +78,9 @@ def browse(path):
                 crumbs.append('<li class="active">%s</li>' % item)
         # intake catalogs
         if cat.container == 'catalog':
-            return render_template('catalog.html', cat=cat, crumbs=crumbs, path=path)
+            return render_template('catalog.html', cat=cat, crumbs=crumbs, path=path,
+                                   catalogs=any([cat[item].container == 'catalog' for item in cat]),
+                                   datasets=any([cat[item].container in ['dataframe', 'xarray'] for item in cat]))
         # intake-esm collections
         elif cat._driver == 'intake_esm.esm_datastore':
             r = requests.get(cat.esmcol_path)
