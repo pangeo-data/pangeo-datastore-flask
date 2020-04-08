@@ -45,21 +45,17 @@
 
 {% block content %}
 <main role="main" class="container">
-  <h1>Pangeo Catalog</h1>
+  <h1>{{ cat.name }}</h1>
   <div>
     <ol class="breadcrumb">
-      {% block crumbs %}
       {% for crumb in crumbs %}
       {{ crumb | safe}}
       {% endfor %}
-      {% endblock %}
     </ol>
   </div>
   <div class="info">
-    {% block name %}
-    <h2>{{ cat.name }}</h2>
-    <p class="description">{{ cat.description }}</p>
-    {% endblock %}
+
+    <h2>{{ cat.description }}</h2>
 
     <h3>Load in Python</h3>
     <pre><code class="language-python">from intake import open_catalog<br>
