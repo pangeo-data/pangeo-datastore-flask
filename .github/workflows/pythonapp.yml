@@ -6,8 +6,20 @@ name: Python application
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - 'builds/**'
+      - '.gcloudignore'
+      - '.github/**'
+      - '.gitignore'
+      - 'README.md'
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - 'builds/**'
+      - '.gcloudignore'
+      - '.github/**'
+      - '.gitignore'
+      - 'README.md'
 
 jobs:
   build:
