@@ -1,5 +1,0 @@
-steps:
-- name: "python:3.7"
-  entrypoint: "bash"
-  args: ["./builds/on_pull_request.sh"]
-timeout: "1600s"
