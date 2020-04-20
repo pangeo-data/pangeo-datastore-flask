@@ -7,7 +7,6 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
-      - 'builds/**'
       - '.gcloudignore'
       - '.github/**'
       - '.gitignore'
@@ -15,7 +14,6 @@ on:
   pull_request:
     branches: [ master ]
     paths-ignore:
-      - 'builds/**'
       - '.gcloudignore'
       - '.github/**'
       - '.gitignore'
