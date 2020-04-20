@@ -18,6 +18,12 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - 'builds/**'
+      - '.gcloudignore'
+      - '.github/**'
+      - '.gitignore'
+      - 'README.md'
 
 jobs:
   setup-build-deploy:
