@@ -22,6 +22,7 @@ on:
       - '.github/**'
       - '.gitignore'
       - 'README.md'
+      - 'scripts/**'
 
 jobs:
   setup-build-deploy:
