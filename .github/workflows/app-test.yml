@@ -11,6 +11,7 @@ on:
       - '.github/**'
       - '.gitignore'
       - 'README.md'
+      - 'scripts/**'
   pull_request:
     branches: [ master ]
     paths-ignore:
