@@ -4,7 +4,7 @@ name: Check disk usage of gs://pangeo-data
 
 on:
   schedule:
-    - cron: '0 */1 * * *'
+    - cron: '0 12 * * */1'
 
 jobs:
   du-pangeo-data:
