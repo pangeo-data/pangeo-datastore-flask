@@ -25,6 +25,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    if: github.repository == 'pangeo-data/pangeo-datastore-flask'
 
     steps:
     - name: Checkout
