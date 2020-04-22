@@ -28,6 +28,7 @@ jobs:
   setup-build-deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    if: github.repository == 'pangeo-data/pangeo-datastore-flask'
 
     steps:
       - name: Checkout
