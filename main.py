@@ -31,7 +31,8 @@ csp = {'style-src': ["'self'",
                     'https://fonts.gstatic.com']}
 Talisman(app, content_security_policy=csp)
 
-cache = Cache(config={'CACHE_TYPE': 'simple',
+cache = Cache(config={'CACHE_TYPE': 'filesystem',
+                      'CACHE_DIR': 'cache',
                       'CACHE_DEFAULT_TIMEOUT': 1800})
 
 cache.init_app(app)
