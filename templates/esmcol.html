@@ -41,11 +41,11 @@
 <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
 {% endblock %}
 
-{% block title %}{{ cat.description }}{% endblock %}
+{% block title %}{{ cat._description }}{% endblock %}
 
 {% block content %}
 <main role="main" class="container">
-  <h1>{{ cat.name }}</h1>
+  <h1>{{ cat._name }}</h1>
   <div>
     <ol class="breadcrumb">
       {% for crumb in crumbs %}
@@ -55,12 +55,12 @@
   </div>
   <div class="info">
 
-    <h2>{{ cat.description }}</h2>
+    <h2>{{ cat._description }}</h2>
 
     <h3>Load in Python</h3>
     <pre><code class="language-python">from intake import open_catalog<br>
 cat = open_catalog("{{ cat.catalog_object.path }}")
-ds  = cat.{{ cat.name }}()</code></pre>
+ds  = cat.{{ cat._name }}()</code></pre>
 
     <h3>Metadata</h3>
     <pre id="json-renderer"></pre>
