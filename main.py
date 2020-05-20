@@ -63,8 +63,8 @@ def browse(path):
         if len(items) == 1:
             crumbs = ['<li class="active">%s</li>' % cat.name]
             return render_template('catalog.html', cat=cat, crumbs=crumbs, path=path,
-                                   catalogs=any([cat[item].container == 'catalog' for item in cat]),
-                                   datasets=any([cat[item].container in ['dataframe', 'xarray'] for item in cat]))
+                                   catalogs=any([cat[item]._container == 'catalog' for item in cat]),
+                                   datasets=any([cat[item]._container in ['dataframe', 'xarray'] for item in cat]))
         else:
             crumbs = ['<li><a href="%s">%s</a></li>' %
                     (url_for('browse', path='/'.join(items[0:1])), cat.name)]
@@ -77,21 +77,21 @@ def browse(path):
             else:
                 crumbs.append('<li class="active">%s</li>' % item)
         # intake catalogs
-        if cat.container == 'catalog':
+        if cat._container == 'catalog':
             return render_template('catalog.html', cat=cat, crumbs=crumbs, path=path,
-                                   catalogs=any([cat[item].container == 'catalog' for item in cat]),
-                                   datasets=any([cat[item].container in ['dataframe', 'xarray'] for item in cat]))
+                                   catalogs=any([cat[item]._container == 'catalog' for item in cat]),
+                                   datasets=any([cat[item]._container in ['dataframe', 'xarray'] for item in cat]))
         # intake-esm collections
         elif cat._driver == 'intake_esm.esm_datastore':
-            r = requests.get(cat.esmcol_path)
+            r = requests.get(cat._captured_init_kwargs['args']['esmcol_obj'])
             return render_template('esmcol.html', cat=cat, crumbs=crumbs, json=r.json())
         # anything that can be handled with `to_dask()`
-        elif cat.container in ['dataframe', 'xarray']:
+        elif cat._container in ['dataframe', 'xarray']:
             return render_template('dask.html', cat=cat, crumbs=crumbs)
         # generic error for anything else
         else:
             raise NotImplementedError('This type of dataset is not recognized: %s, %s' %
-                                     (cat.container, cat._driver))
+                                     (cat._container, cat._driver))
     except:
         type, value = sys.exc_info()[:2]
         return render_template('error.html', type=type, value=value), 500

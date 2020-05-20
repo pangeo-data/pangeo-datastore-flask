@@ -25,10 +25,10 @@ list(cat)</code></pre>
     <h3>Child Catalogs</h3>
     <div class="list-group">
       {% for item in cat|sort %}
-      {% if cat[item].container == "catalog" %}
+      {% if cat[item]._container == "catalog" %}
       <a href="{{ url_for('browse', path='%s/%s' % (path, item)) }}" class="list-group-item">
         <h4>{{ item }}</h4>
-        <p class="description">{{ cat[item].description }}</p>
+        <p class="description">{{ cat[item]._description }}</p>
       </a>
       {% endif %}
       {% endfor %}
@@ -39,10 +39,10 @@ list(cat)</code></pre>
     <h3>Datasets</h3>
     <div class="list-group">
       {% for item in cat|sort %}
-      {% if cat[item].container in ["xarray", "dataframe"] %}
+      {% if cat[item]._container in ["xarray", "dataframe"] %}
       <a href="{{ url_for('browse', path='%s/%s' % (path, item)) }}" class="list-group-item">
         <h4>{{ item }}</h4>
-        <p class="description">{{ cat[item].description }}</p>
+        <p class="description">{{ cat[item]._description }}</p>
       </a>
       {% endif %}
       {% endfor %}
