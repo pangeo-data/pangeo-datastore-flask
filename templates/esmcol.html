@@ -61,6 +61,27 @@
     <pre><code class="language-python">from intake import open_catalog<br>
 cat = open_catalog("{{ cat.catalog_object.path }}")
 ds  = cat.{{ cat._name }}()</code></pre>
+    
+    <h3>Working with requester pays data</h3>
+    Several of the datasets within the cloud data catalog are contained in <a href="https://cloud.google.com/storage/docs/requester-pays">requester pays</a> storage buckets.
+    This means that a user requesting data must provide their own billing project (created and authenticated through Google Cloud Platform) to be billed for the charges associated with accessing a dataset.
+    To set up an GCP billing project and use it for authentication in applications:
+    <ul>
+      <li><a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#creating_a_project">Create a project on GCP</a>; if this is the first time using GCP, a prompt will appear to choose a Google account to link to all GCP-related activities.</li>
+      <li><a href="https://cloud.google.com/billing/docs/how-to/manage-billing-account#create_a_new_billing_account">Create a Cloud Billing account</a> associated with the project and <a href="https://cloud.google.com/billing/docs/how-to/modify-project#enable_billing_for_a_project">enable billing for the project</a> through this account.</li>
+      <li>Through command line, install the <a href="https://cloud.google.com/sdk">Google Cloud SDK</a>; this can either be through conda:
+        <pre><code> conda install -c conda-forge google-cloud-sdk</code></pre>
+      </li>
+      <li>Initialize the <code>gcloud</code> command line interface, logging into the account used to create the aforementioned project and selecting it as the default project:
+        <pre><code>gcloud auth login
+gcloud init</code></pre>
+      </li>
+      <li><a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts#creating">Create a service account</a> associated with the default project, giving it the <strong>Service Usage Admin</strong> role, which enables it to make billed requests on behalf of the project.</li>
+      <li><a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys">Generate a service account key</a> for the account (making sure it is JSON-formatted); move this to a secure directory.</li>
+      <li>Set up application credentials (allowing this service account&#39;s permissions to be used in applications) by exporting the location of the key file to an environment variable:
+        <pre><code>export GOOGLE_APPLICATION_CREDENTIALS=/path/to/key.json</code></pre>
+      </li>
+    </ul>
 
     <h3>Metadata</h3>
     <pre id="json-renderer"></pre>
