@@ -28,17 +28,16 @@ ds  = cat["{{ cat._name }}"].to_dask()</code></pre>
     <ul>
       <li><a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#creating_a_project">Create a project on GCP</a>; if this is the first time using GCP, a prompt will appear to choose a Google account to link to all GCP-related activities.</li>
       <li><a href="https://cloud.google.com/billing/docs/how-to/manage-billing-account#create_a_new_billing_account">Create a Cloud Billing account</a> associated with the project and <a href="https://cloud.google.com/billing/docs/how-to/modify-project#enable_billing_for_a_project">enable billing for the project</a> through this account.</li>
-      <li>Through command line, install the <a href="https://cloud.google.com/sdk">Google Cloud SDK</a>; this can either be through conda:
-        <pre><code> conda install -c conda-forge google-cloud-sdk</code></pre>
+      <li>Using <a href="https://cloud.google.com/iam/docs/granting-changing-revoking-access#granting-console">Google Cloud IAM</a>, add the <strong>Service Usage Consumer</strong> role to your account, which enables it to make billed requests on the behalf of the project.</li>
+      <li>Through command line, install the <a href="https://cloud.google.com/sdk">Google Cloud SDK</a>; this can be done using conda:
+        <pre><code>conda install -c conda-forge google-cloud-sdk</code></pre>
       </li>
-      <li>Initialize the <code>gcloud</code> command line interface, logging into the account used to create the aforementioned project and selecting it as the default project:
+      <li>Initialize the <code>gcloud</code> command line interface, logging into the account used to create the aforementioned project and selecting it as the default project; this will allow the project to be used for requester pays access through the command line:
         <pre><code>gcloud auth login
 gcloud init</code></pre>
       </li>
-      <li><a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts#creating">Create a service account</a> associated with the default project, giving it the <strong>Service Usage Admin</strong> role, which enables it to make billed requests on behalf of the project.</li>
-      <li><a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys">Generate a service account key</a> for the account (making sure it is JSON-formatted); move this to a secure directory.</li>
-      <li>Set up application credentials (allowing this service account&#39;s permissions to be used in applications) by exporting the location of the key file to an environment variable:
-        <pre><code>export GOOGLE_APPLICATION_CREDENTIALS=/path/to/key.json</code></pre>
+      <li>Finally, use <code>gcloud</code> to establish application default credentials; this will allow the project to be used for requester pays access through applications:
+        <pre><code>gcloud auth application-default login</code></pre>
       </li>
     </ul>
 
