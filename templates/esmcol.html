@@ -61,6 +61,26 @@
     <pre><code class="language-python">from intake import open_catalog<br>
 cat = open_catalog("{{ cat.catalog_object.path }}")
 ds  = cat.{{ cat._name }}()</code></pre>
+    
+    <h3>Working with requester pays data</h3>
+    Several of the datasets within the cloud data catalog are contained in <a href="https://cloud.google.com/storage/docs/requester-pays">requester pays</a> storage buckets.
+    This means that a user requesting data must provide their own billing project (created and authenticated through Google Cloud Platform) to be billed for the charges associated with accessing a dataset.
+    To set up an GCP billing project and use it for authentication in applications:
+    <ul>
+      <li><a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#creating_a_project">Create a project on GCP</a>; if this is the first time using GCP, a prompt will appear to choose a Google account to link to all GCP-related activities.</li>
+      <li><a href="https://cloud.google.com/billing/docs/how-to/manage-billing-account#create_a_new_billing_account">Create a Cloud Billing account</a> associated with the project and <a href="https://cloud.google.com/billing/docs/how-to/modify-project#enable_billing_for_a_project">enable billing for the project</a> through this account.</li>
+      <li>Using <a href="https://cloud.google.com/iam/docs/granting-changing-revoking-access#granting-console">Google Cloud IAM</a>, add the <strong>Service Usage Consumer</strong> role to your account, which enables it to make billed requests on the behalf of the project.</li>
+      <li>Through command line, install the <a href="https://cloud.google.com/sdk">Google Cloud SDK</a>; this can be done using conda:
+        <pre><code>conda install -c conda-forge google-cloud-sdk</code></pre>
+      </li>
+      <li>Initialize the <code>gcloud</code> command line interface, logging into the account used to create the aforementioned project and selecting it as the default project; this will allow the project to be used for requester pays access through the command line:
+        <pre><code>gcloud auth login
+gcloud init</code></pre>
+      </li>
+      <li>Finally, use <code>gcloud</code> to establish application default credentials; this will allow the project to be used for requester pays access through applications:
+        <pre><code>gcloud auth application-default login</code></pre>
+      </li>
+    </ul>
 
     <h3>Metadata</h3>
     <pre id="json-renderer"></pre>
