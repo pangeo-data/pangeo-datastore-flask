@@ -1,5 +1,5 @@
 dask==2.14.0
-distributed==2.14.0
+distributed==2021.10.0
 Flask==1.1.2
 Flask-Bootstrap==3.3.7.1
 Flask-Caching==1.8.0
